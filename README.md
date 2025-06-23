@@ -11,14 +11,20 @@ The Vriksh Reimbursement App streamlines the process of submitting, tracking, an
 
 - User Authentication: Secure login and role-based access for employees and administrators.
 - Request Submission: Employees can submit reimbursement claims with receipts and details.
-Status Tracking: Real-time updates on claim status (Submitted, Under Review, Approved, Rejected, Paid).
-Admin Dashboard: Admins can review, approve, or reject claims and manage users.
-Notifications: Automated email notifications for claim status changes.
-Reports: Exportable reports for financial tracking and auditing.
-Responsive Design: Works smoothly on desktops, tablets, and mobile devices.
+- Status Tracking: Real-time updates on claim status (Submitted, Under Review, Approved, Rejected, Paid).
+- Admin Dashboard: Admins can review, approve, or reject claims and manage users.
+- Notifications: Automated email notifications for claim status changes.
+- Reports: Exportable reports for financial tracking and auditing.
+- Responsive Design: Works smoothly on desktops, tablets, and mobile devices.
 
-## Deploy on Vercel
+## Tech Stack
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- Frontend: TypeScript, React
+- Styling: CSS
+- Backend: Node.js, Express (if applicable)
+- Database: (Specify here, e.g., Supabase, PostgreSQL)
+- Other: JavaScript utilities
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## License
+
+This project is proprietary and intended for internal use at Vriksh-Net.
