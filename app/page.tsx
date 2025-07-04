@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useEffect } from "react";
@@ -6,12 +5,6 @@ import { useRouter } from "next/navigation";
 
 export default function HomePage() {
   const router = useRouter();
-
-  // useEffect(() => {
-  //   // Redirect to login page
-  //   router.push("/login");
-  // }, [router]);
-  
   useEffect(() => {
     // Redirect to login page
     router.push("/dashboard");
