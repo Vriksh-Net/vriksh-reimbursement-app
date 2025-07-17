@@ -86,7 +86,6 @@
 //     expenseDate: "",
 //     description: "",
 
-    
 //     // Travel fields
 //     isTravelExpense: false,
 //     fromLocation: "",
@@ -96,8 +95,6 @@
 //     transportMode: "",
 //     accommodationDetails: "",
 //     businessPurpose: "",
-
-
 
 //     // Food fields
 //     isFoodExpense: false,
@@ -139,7 +136,6 @@
 //       });
 //     }
 //   };
-  
 
 //   const fetchMealTypes = async () => {
 //     try {
@@ -884,7 +880,7 @@
 //             </div>
 
 //             <div className="flex gap-4">
-                
+
 //               <Button type="submit" disabled={loading} className="flex-1">
 //                 {loading ? "Submitting..." : "Submit Expense Report"}
 //               </Button>
@@ -903,25 +899,37 @@
 //   );
 // }
 
-"use client"
+"use client";
 
-import type React from "react"
+import type React from "react";
 
-import { useState, useEffect } from "react"
-import { useRouter } from "next/navigation"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Textarea } from "@/components/ui/textarea"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Checkbox } from "@/components/ui/checkbox"
-import { Badge } from "@/components/ui/badge"
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-import { supabase } from "@/lib/supabase"
-import { useAuth } from "@/lib/auth-context"
-import { toast } from "@/hooks/use-toast"
-import { uploadFile, validateFile } from "@/lib/file-upload"
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Badge } from "@/components/ui/badge";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { supabase } from "@/lib/supabase";
+import { useAuth } from "@/lib/auth-context";
+import { toast } from "@/hooks/use-toast";
+import { uploadFile, validateFile } from "@/lib/file-upload";
 import {
   Upload,
   X,
@@ -936,25 +944,26 @@ import {
   UtensilsCrossed,
   Users,
   User,
-} from "lucide-react"
+  Bike,
+} from "lucide-react";
 
 interface ExpenseCategory {
-  id: string
-  name: string
-  description: string
+  id: string;
+  name: string;
+  description: string;
 }
 
 interface MealType {
-  id: string
-  name: string
-  description: string
+  id: string;
+  name: string;
+  description: string;
 }
 
 interface UploadedFile {
-  file: File
-  url?: string
-  uploading: boolean
-  error?: string
+  file: File;
+  url?: string;
+  uploading: boolean;
+  error?: string;
 }
 
 const transportModes = [
@@ -963,19 +972,22 @@ const transportModes = [
   { value: "train", label: "Train", icon: Train },
   { value: "bus", label: "Bus", icon: Bus },
   { value: "other", label: "Other", icon: Car },
-]
+  { value: "hired bike", label: "Hired Car/Bike", icon: Bike },
+  { value: "own", label: "Own Bike/Car", icon: Bike },
+];
 
 export default function SubmitExpensePage() {
-  const [categories, setCategories] = useState<ExpenseCategory[]>([])
-  const [mealTypes, setMealTypes] = useState<MealType[]>([])
-  const [loading, setLoading] = useState(false)
-  const [uploadedFiles, setUploadedFiles] = useState<UploadedFile[]>([])
+  const [categories, setCategories] = useState<ExpenseCategory[]>([]);
+  const [mealTypes, setMealTypes] = useState<MealType[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [uploadedFiles, setUploadedFiles] = useState<UploadedFile[]>([]);
   const [formData, setFormData] = useState({
     title: "",
     categoryId: "",
     amount: "",
     expenseDate: "",
     description: "",
+
     // Travel fields
     isTravelExpense: false,
     fromLocation: "",
@@ -985,6 +997,7 @@ export default function SubmitExpensePage() {
     transportMode: "",
     accommodationDetails: "",
     businessPurpose: "",
+
     // Food fields
     isFoodExpense: false,
     foodName: "",
@@ -994,97 +1007,115 @@ export default function SubmitExpensePage() {
     clientCompany: "",
     numberOfAttendees: "1",
     mealType: "",
-  })
-  const { userProfile } = useAuth()
-  const router = useRouter()
+  });
+  const { userProfile } = useAuth();
+  const router = useRouter();
 
   useEffect(() => {
-    fetchCategories()
-    fetchMealTypes()
-  }, [])
+    fetchCategories();
+    fetchMealTypes();
+  }, []);
 
   const fetchCategories = async () => {
     try {
-      const { data, error } = await supabase.from("expense_categories").select("*").eq("is_active", true).order("name")
+      const { data, error } = await supabase
+        .from("expense_categories")
+        .select("*")
+        .eq("is_active", true)
+        .order("name");
 
       if (error) {
-        throw error
+        throw error;
       }
 
-      setCategories(data || [])
+      setCategories(data || []);
     } catch (error) {
-      console.error("Error fetching categories:", error)
+      console.error("Error fetching categories:", error);
       toast({
         title: "Error",
         description: "Failed to load expense categories",
         variant: "destructive",
-      })
+      });
     }
-  }
+  };
 
   const fetchMealTypes = async () => {
     try {
-      const { data, error } = await supabase.from("meal_types").select("*").eq("is_active", true).order("name")
+      const { data, error } = await supabase
+        .from("meal_types")
+        .select("*")
+        .eq("is_active", true)
+        .order("name");
 
       if (error) {
-        throw error
+        throw error;
       }
 
-      setMealTypes(data || [])
+      setMealTypes(data || []);
     } catch (error) {
-      console.error("Error fetching meal types:", error)
+      console.error("Error fetching meal types:", error);
       // Don't show error toast for meal types as it's not critical
     }
-  }
+  };
 
-  const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    const files = Array.from(event.target.files || [])
+  const handleFileUpload = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const files = Array.from(event.target.files || []);
 
     for (const file of files) {
-      const validation = validateFile(file)
+      const validation = validateFile(file);
       if (!validation.valid) {
         toast({
           title: "Invalid File",
           description: validation.error,
           variant: "destructive",
-        })
-        continue
+        });
+        continue;
       }
 
       const newFile: UploadedFile = {
         file,
         uploading: true,
-      }
+      };
 
-      setUploadedFiles((prev) => [...prev, newFile])
+      setUploadedFiles((prev) => [...prev, newFile]);
 
       try {
-        const result = await uploadFile(file)
+        const result = await uploadFile(file);
         if (result.error) {
-          throw new Error(result.error)
+          throw new Error(result.error);
         }
 
-        setUploadedFiles((prev) => prev.map((f) => (f.file === file ? { ...f, url: result.url, uploading: false } : f)))
+        setUploadedFiles((prev) =>
+          prev.map((f) =>
+            f.file === file ? { ...f, url: result.url, uploading: false } : f
+          )
+        );
       } catch (error: any) {
         setUploadedFiles((prev) =>
-          prev.map((f) => (f.file === file ? { ...f, uploading: false, error: error.message } : f)),
-        )
+          prev.map((f) =>
+            f.file === file
+              ? { ...f, uploading: false, error: error.message }
+              : f
+          )
+        );
         toast({
           title: "Upload Failed",
           description: error.message,
           variant: "destructive",
-        })
+        });
       }
     }
-  }
+  };
 
   const removeFile = (fileToRemove: File) => {
-    setUploadedFiles((prev) => prev.filter((f) => f.file !== fileToRemove))
-  }
+    setUploadedFiles((prev) => prev.filter((f) => f.file !== fileToRemove));
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    if (!userProfile) return
+    e.preventDefault();
+    if (!userProfile) return;
 
     // Validate travel fields if it's a travel expense
     if (formData.isTravelExpense) {
@@ -1100,17 +1131,19 @@ export default function SubmitExpensePage() {
           title: "Missing Information",
           description: "Please fill in all travel-related fields",
           variant: "destructive",
-        })
-        return
+        });
+        return;
       }
 
-      if (new Date(formData.travelStartDate) > new Date(formData.travelEndDate)) {
+      if (
+        new Date(formData.travelStartDate) > new Date(formData.travelEndDate)
+      ) {
         toast({
           title: "Invalid Dates",
           description: "Travel start date must be before end date",
           variant: "destructive",
-        })
-        return
+        });
+        return;
       }
     }
 
@@ -1121,8 +1154,8 @@ export default function SubmitExpensePage() {
           title: "Missing Information",
           description: "Please fill in food name and meal type",
           variant: "destructive",
-        })
-        return
+        });
+        return;
       }
 
       if (formData.withClient && !formData.clientName) {
@@ -1130,37 +1163,37 @@ export default function SubmitExpensePage() {
           title: "Missing Information",
           description: "Please provide client name when dining with client",
           variant: "destructive",
-        })
-        return
+        });
+        return;
       }
 
-      const attendees = Number.parseInt(formData.numberOfAttendees)
+      const attendees = Number.parseInt(formData.numberOfAttendees);
       if (attendees < 1 || attendees > 50) {
         toast({
           title: "Invalid Number",
           description: "Number of attendees must be between 1 and 50",
           variant: "destructive",
-        })
-        return
+        });
+        return;
       }
     }
 
     // Check if files are still uploading
-    const stillUploading = uploadedFiles.some((f) => f.uploading)
+    const stillUploading = uploadedFiles.some((f) => f.uploading);
     if (stillUploading) {
       toast({
         title: "Upload in Progress",
         description: "Please wait for all files to finish uploading",
         variant: "destructive",
-      })
-      return
+      });
+      return;
     }
 
-    setLoading(true)
+    setLoading(true);
 
     try {
       // Get the main bill file (first uploaded file)
-      const mainBillFile = uploadedFiles[0]
+      const mainBillFile = uploadedFiles[0];
 
       const expenseData = {
         user_id: userProfile.id,
@@ -1199,15 +1232,15 @@ export default function SubmitExpensePage() {
           bill_file_name: mainBillFile.file.name,
           bill_file_size: mainBillFile.file.size,
         }),
-      }
+      };
 
       const { data: expenseReport, error } = await supabase
         .from("expense_reports")
         .insert(expenseData)
         .select()
-        .single()
+        .single();
 
-      if (error) throw error
+      if (error) throw error;
 
       // Create initial workflow entry
       await supabase.rpc("update_expense_workflow", {
@@ -1215,7 +1248,7 @@ export default function SubmitExpensePage() {
         p_new_stage: "submitted",
         p_approved_by: null,
         p_notes: "Expense report submitted by employee",
-      })
+      });
 
       // Upload additional attachments if any
       if (uploadedFiles.length > 1) {
@@ -1225,58 +1258,77 @@ export default function SubmitExpensePage() {
           file_url: file.url!,
           file_size: file.file.size,
           file_type: file.file.type,
-        }))
+        }));
 
-        const { error: attachmentError } = await supabase.from("expense_attachments").insert(attachments)
+        const { error: attachmentError } = await supabase
+          .from("expense_attachments")
+          .insert(attachments);
 
         if (attachmentError) {
-          console.error("Error uploading attachments:", attachmentError)
+          console.error("Error uploading attachments:", attachmentError);
           // Don't fail the whole submission for attachment errors
         }
       }
 
       toast({
         title: "Success",
-        description: "Expense report submitted successfully! You can now track its progress.",
-      })
+        description:
+          "Expense report submitted successfully! You can now track its progress.",
+      });
 
-      router.push("/dashboard/reports")
+      router.push("/dashboard/reports");
     } catch (error: any) {
       toast({
         title: "Error",
         description: error.message,
         variant: "destructive",
-      })
+      });
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
-  const handleInputChange = (field: string, value: string | boolean | number) => {
-    setFormData((prev) => ({ ...prev, [field]: value }))
-  }
+  const handleInputChange = (
+    field: string,
+    value: string | boolean | number
+  ) => {
+    setFormData((prev) => ({ ...prev, [field]: value }));
+  };
 
   const formatFileSize = (bytes: number) => {
-    if (bytes === 0) return "0 Bytes"
-    const k = 1024
-    const sizes = ["Bytes", "KB", "MB", "GB"]
-    const i = Math.floor(Math.log(bytes) / Math.log(k))
-    return Number.parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i]
-  }
+    if (bytes === 0) return "0 Bytes";
+    const k = 1024;
+    const sizes = ["Bytes", "KB", "MB", "GB"];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return (
+      Number.parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i]
+    );
+  };
 
   const getFileIcon = (file: File) => {
     if (file.type.startsWith("image/")) {
-      return <ImageIcon className="h-4 w-4" />
+      return <ImageIcon className="h-4 w-4" />;
     }
-    return <FileText className="h-4 w-4" />
-  }
+    return <FileText className="h-4 w-4" />;
+  };
+
+
+  const FormData = {
+  // ... other fields ...
+  hotelName: "",
+  dates: "",
+  specialRequirements: "",
+};
 
   return (
     <div className="max-w-4xl mx-auto">
       <Card>
         <CardHeader>
           <CardTitle>Submit Expense Report</CardTitle>
-          <CardDescription>Fill out the form below to submit a new expense report for reimbursement</CardDescription>
+          <CardDescription>
+            Fill out the form below to submit a new expense report for
+            reimbursement
+          </CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-6">
@@ -1297,7 +1349,12 @@ export default function SubmitExpensePage() {
 
               <div className="space-y-2">
                 <Label htmlFor="category">Category</Label>
-                <Select value={formData.categoryId} onValueChange={(value) => handleInputChange("categoryId", value)}>
+                <Select
+                  value={formData.categoryId}
+                  onValueChange={(value) =>
+                    handleInputChange("categoryId", value)
+                  }
+                >
                   <SelectTrigger>
                     <SelectValue placeholder="Select expense category" />
                   </SelectTrigger>
@@ -1320,7 +1377,9 @@ export default function SubmitExpensePage() {
                     step="0.01"
                     min="0"
                     value={formData.amount}
-                    onChange={(e) => handleInputChange("amount", e.target.value)}
+                    onChange={(e) =>
+                      handleInputChange("amount", e.target.value)
+                    }
                     placeholder="0.00"
                     required
                   />
@@ -1332,7 +1391,9 @@ export default function SubmitExpensePage() {
                     id="expenseDate"
                     type="date"
                     value={formData.expenseDate}
-                    onChange={(e) => handleInputChange("expenseDate", e.target.value)}
+                    onChange={(e) =>
+                      handleInputChange("expenseDate", e.target.value)
+                    }
                     required
                   />
                 </div>
@@ -1343,7 +1404,9 @@ export default function SubmitExpensePage() {
                 <Textarea
                   id="description"
                   value={formData.description}
-                  onChange={(e) => handleInputChange("description", e.target.value)}
+                  onChange={(e) =>
+                    handleInputChange("description", e.target.value)
+                  }
                   placeholder="Provide additional details about this expense..."
                   rows={3}
                 />
@@ -1360,11 +1423,14 @@ export default function SubmitExpensePage() {
                     id="isTravelExpense"
                     checked={formData.isTravelExpense}
                     onCheckedChange={(checked) => {
-                      handleInputChange("isTravelExpense", checked as boolean)
-                      if (checked) handleInputChange("isFoodExpense", false)
+                      handleInputChange("isTravelExpense", checked as boolean);
+                      if (checked) handleInputChange("isFoodExpense", false);
                     }}
                   />
-                  <Label htmlFor="isTravelExpense" className="text-sm font-medium">
+                  <Label
+                    htmlFor="isTravelExpense"
+                    className="text-sm font-medium"
+                  >
                     This is a travel-related expense
                   </Label>
                 </div>
@@ -1374,11 +1440,14 @@ export default function SubmitExpensePage() {
                     id="isFoodExpense"
                     checked={formData.isFoodExpense}
                     onCheckedChange={(checked) => {
-                      handleInputChange("isFoodExpense", checked as boolean)
-                      if (checked) handleInputChange("isTravelExpense", false)
+                      handleInputChange("isFoodExpense", checked as boolean);
+                      if (checked) handleInputChange("isTravelExpense", false);
                     }}
                   />
-                  <Label htmlFor="isFoodExpense" className="text-sm font-medium">
+                  <Label
+                    htmlFor="isFoodExpense"
+                    className="text-sm font-medium"
+                  >
                     This is a food/meal expense
                   </Label>
                 </div>
@@ -1401,7 +1470,9 @@ export default function SubmitExpensePage() {
                       <Input
                         id="fromLocation"
                         value={formData.fromLocation}
-                        onChange={(e) => handleInputChange("fromLocation", e.target.value)}
+                        onChange={(e) =>
+                          handleInputChange("fromLocation", e.target.value)
+                        }
                         placeholder="Departure city/location"
                         className="pl-10"
                         required={formData.isTravelExpense}
@@ -1416,7 +1487,9 @@ export default function SubmitExpensePage() {
                       <Input
                         id="toLocation"
                         value={formData.toLocation}
-                        onChange={(e) => handleInputChange("toLocation", e.target.value)}
+                        onChange={(e) =>
+                          handleInputChange("toLocation", e.target.value)
+                        }
                         placeholder="Destination city/location"
                         className="pl-10"
                         required={formData.isTravelExpense}
@@ -1434,7 +1507,9 @@ export default function SubmitExpensePage() {
                         id="travelStartDate"
                         type="date"
                         value={formData.travelStartDate}
-                        onChange={(e) => handleInputChange("travelStartDate", e.target.value)}
+                        onChange={(e) =>
+                          handleInputChange("travelStartDate", e.target.value)
+                        }
                         className="pl-10"
                         required={formData.isTravelExpense}
                       />
@@ -1449,7 +1524,9 @@ export default function SubmitExpensePage() {
                         id="travelEndDate"
                         type="date"
                         value={formData.travelEndDate}
-                        onChange={(e) => handleInputChange("travelEndDate", e.target.value)}
+                        onChange={(e) =>
+                          handleInputChange("travelEndDate", e.target.value)
+                        }
                         className="pl-10"
                         required={formData.isTravelExpense}
                       />
@@ -1461,7 +1538,9 @@ export default function SubmitExpensePage() {
                   <Label htmlFor="transportMode">Mode of Transport</Label>
                   <Select
                     value={formData.transportMode}
-                    onValueChange={(value) => handleInputChange("transportMode", value)}
+                    onValueChange={(value) =>
+                      handleInputChange("transportMode", value)
+                    }
                   >
                     <SelectTrigger>
                       <SelectValue placeholder="Select transport mode" />
@@ -1484,22 +1563,80 @@ export default function SubmitExpensePage() {
                   <Textarea
                     id="businessPurpose"
                     value={formData.businessPurpose}
-                    onChange={(e) => handleInputChange("businessPurpose", e.target.value)}
+                    onChange={(e) =>
+                      handleInputChange("businessPurpose", e.target.value)
+                    }
                     placeholder="Describe the business purpose of this travel..."
                     rows={2}
                     required={formData.isTravelExpense}
                   />
                 </div>
 
-                <div className="space-y-2">
-                  <Label htmlFor="accommodationDetails">Accommodation Details (Optional)</Label>
+                {/* <div className="space-y-2">
+                  <Label htmlFor="accommodationDetails">
+                    Accommodation Details (Optional)
+                  </Label>
                   <Textarea
                     id="accommodationDetails"
                     value={formData.accommodationDetails}
-                    onChange={(e) => handleInputChange("accommodationDetails", e.target.value)}
+                    onChange={(e) =>
+                      handleInputChange("accommodationDetails", e.target.value)
+                    }
                     placeholder="Hotel name, dates, special requirements..."
                     rows={2}
                   />
+                </div> */}
+                <div className="space-y-2">
+                  <Label htmlFor="accommodationDetails">
+                    Accommodation Details (Optional)
+                  </Label>
+                  <table className="border-separate border-spacing-4">
+                    <thead>
+                      <tr>
+                        <th>Hotel Name</th>
+                        <th>Dates</th>
+                        <th>Special Requirements</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>
+                          <Input
+                            className="outline-none"
+                            id="hotelName"
+                            value={FormData.hotelName}
+                            onChange={(e) =>
+                              handleInputChange("hotelName", e.target.value)
+                            }
+                            placeholder="Hotel Name"
+                          />
+                        </td>
+                        <td>
+                          <Input
+                            id="dates"
+                            value={FormData.dates}
+                            onChange={(e) =>
+                              handleInputChange("dates", e.target.value)
+                            }
+                            placeholder="Dates"
+                          />
+                        </td>
+                        <td>
+                          <Input
+                            id="specialRequirements"
+                            value={FormData.specialRequirements}
+                            onChange={(e) =>
+                              handleInputChange(
+                                "specialRequirements",
+                                e.target.value
+                              )
+                            }
+                            placeholder="Special Requirements"
+                          />
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
                 </div>
               </div>
             )}
@@ -1518,7 +1655,9 @@ export default function SubmitExpensePage() {
                     <Input
                       id="foodName"
                       value={formData.foodName}
-                      onChange={(e) => handleInputChange("foodName", e.target.value)}
+                      onChange={(e) =>
+                        handleInputChange("foodName", e.target.value)
+                      }
                       placeholder="e.g., Business lunch, Coffee meeting"
                       required={formData.isFoodExpense}
                     />
@@ -1526,7 +1665,12 @@ export default function SubmitExpensePage() {
 
                   <div className="space-y-2">
                     <Label htmlFor="mealType">Meal Type</Label>
-                    <Select value={formData.mealType} onValueChange={(value) => handleInputChange("mealType", value)}>
+                    <Select
+                      value={formData.mealType}
+                      onValueChange={(value) =>
+                        handleInputChange("mealType", value)
+                      }
+                    >
                       <SelectTrigger>
                         <SelectValue placeholder="Select meal type" />
                       </SelectTrigger>
@@ -1542,11 +1686,15 @@ export default function SubmitExpensePage() {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="restaurantName">Restaurant/Hotel Name (Optional)</Label>
+                  <Label htmlFor="restaurantName">
+                    Restaurant/Hotel Name (Optional)
+                  </Label>
                   <Input
                     id="restaurantName"
                     value={formData.restaurantName}
-                    onChange={(e) => handleInputChange("restaurantName", e.target.value)}
+                    onChange={(e) =>
+                      handleInputChange("restaurantName", e.target.value)
+                    }
                     placeholder="Name of restaurant, hotel, or venue"
                   />
                 </div>
@@ -1555,7 +1703,9 @@ export default function SubmitExpensePage() {
                   <Label>Dining Arrangement</Label>
                   <RadioGroup
                     value={formData.withClient ? "client" : "alone"}
-                    onValueChange={(value) => handleInputChange("withClient", value === "client")}
+                    onValueChange={(value) =>
+                      handleInputChange("withClient", value === "client")
+                    }
                   >
                     <div className="flex items-center space-x-2">
                       <RadioGroupItem value="alone" id="alone" />
@@ -1581,18 +1731,24 @@ export default function SubmitExpensePage() {
                       <Input
                         id="clientName"
                         value={formData.clientName}
-                        onChange={(e) => handleInputChange("clientName", e.target.value)}
+                        onChange={(e) =>
+                          handleInputChange("clientName", e.target.value)
+                        }
                         placeholder="Client's full name"
                         required={formData.withClient}
                       />
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor="clientCompany">Client Company (Optional)</Label>
+                      <Label htmlFor="clientCompany">
+                        Client Company (Optional)
+                      </Label>
                       <Input
                         id="clientCompany"
                         value={formData.clientCompany}
-                        onChange={(e) => handleInputChange("clientCompany", e.target.value)}
+                        onChange={(e) =>
+                          handleInputChange("clientCompany", e.target.value)
+                        }
                         placeholder="Client's company name"
                       />
                     </div>
@@ -1607,11 +1763,15 @@ export default function SubmitExpensePage() {
                     min="1"
                     max="50"
                     value={formData.numberOfAttendees}
-                    onChange={(e) => handleInputChange("numberOfAttendees", e.target.value)}
+                    onChange={(e) =>
+                      handleInputChange("numberOfAttendees", e.target.value)
+                    }
                     placeholder="Total number of people"
                     required={formData.isFoodExpense}
                   />
-                  <p className="text-xs text-gray-500">Include yourself and all attendees</p>
+                  <p className="text-xs text-gray-500">
+                    Include yourself and all attendees
+                  </p>
                 </div>
               </div>
             )}
@@ -1628,7 +1788,9 @@ export default function SubmitExpensePage() {
                       <span className="mt-2 block text-sm font-medium text-gray-900">
                         Upload bills, receipts, or supporting documents
                       </span>
-                      <span className="mt-1 block text-xs text-gray-500">PNG, JPG, PDF up to 10MB each</span>
+                      <span className="mt-1 block text-xs text-gray-500">
+                        PNG, JPG, PDF up to 10MB each
+                      </span>
                     </Label>
                     <Input
                       id="file-upload"
@@ -1648,19 +1810,37 @@ export default function SubmitExpensePage() {
                   <Label>Uploaded Files</Label>
                   <div className="space-y-2">
                     {uploadedFiles.map((uploadedFile, index) => (
-                      <div key={index} className="flex items-center justify-between p-3 border rounded-lg">
+                      <div
+                        key={index}
+                        className="flex items-center justify-between p-3 border rounded-lg"
+                      >
                         <div className="flex items-center space-x-3">
                           {getFileIcon(uploadedFile.file)}
                           <div>
-                            <p className="text-sm font-medium">{uploadedFile.file.name}</p>
-                            <p className="text-xs text-gray-500">{formatFileSize(uploadedFile.file.size)}</p>
+                            <p className="text-sm font-medium">
+                              {uploadedFile.file.name}
+                            </p>
+                            <p className="text-xs text-gray-500">
+                              {formatFileSize(uploadedFile.file.size)}
+                            </p>
                           </div>
                         </div>
                         <div className="flex items-center space-x-2">
-                          {uploadedFile.uploading && <Badge variant="secondary">Uploading...</Badge>}
-                          {uploadedFile.error && <Badge variant="destructive">Error</Badge>}
-                          {uploadedFile.url && !uploadedFile.uploading && <Badge variant="default">Uploaded</Badge>}
-                          <Button type="button" variant="ghost" size="sm" onClick={() => removeFile(uploadedFile.file)}>
+                          {uploadedFile.uploading && (
+                            <Badge variant="secondary">Uploading...</Badge>
+                          )}
+                          {uploadedFile.error && (
+                            <Badge variant="destructive">Error</Badge>
+                          )}
+                          {uploadedFile.url && !uploadedFile.uploading && (
+                            <Badge variant="default">Uploaded</Badge>
+                          )}
+                          <Button
+                            type="button"
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => removeFile(uploadedFile.file)}
+                          >
                             <X className="h-4 w-4" />
                           </Button>
                         </div>
@@ -1675,7 +1855,11 @@ export default function SubmitExpensePage() {
               <Button type="submit" disabled={loading} className="flex-1">
                 {loading ? "Submitting..." : "Submit Expense Report"}
               </Button>
-              <Button type="button" variant="outline" onClick={() => router.push("/dashboard/reports")}>
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => router.push("/dashboard/reports")}
+              >
                 Cancel
               </Button>
             </div>
@@ -1683,5 +1867,5 @@ export default function SubmitExpensePage() {
         </CardContent>
       </Card>
     </div>
-  )
+  );
 }
