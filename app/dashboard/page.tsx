@@ -14,7 +14,7 @@ import { Badge } from "@/components/ui/badge";
 import { Plus, DollarSign, FileText, Clock, TrendingUp } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 import { useAuth } from "@/lib/auth-context";
-import { DashboardSkeleton } from "@/components/skeletons/dashboard-skeleton"
+import { DashboardSkeleton } from "@/components/skeletons/dashboard-skeleton";
 
 interface DashboardStats {
   totalReports: number;
@@ -106,7 +106,7 @@ export default function DashboardPage() {
     return new Date(dateString).toLocaleDateString();
   };
 
-  const getStatusColor = (status: string) => {
+const getStatusColor = (status: string) => {
     switch (status) {
       case "approved":
         return "bg-green-100 text-green-800";
@@ -117,9 +117,9 @@ export default function DashboardPage() {
     }
   };
 
-   if (loading || !stats) {
+  if (loading || !stats) {
     return <DashboardSkeleton />
-  }
+  };
 
   return (
     <div className="space-y-6">

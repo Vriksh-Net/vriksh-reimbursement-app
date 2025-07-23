@@ -1008,6 +1008,12 @@ export default function SubmitExpensePage() {
     numberOfAttendees: "1",
     mealType: "",
   });
+
+  const [FormData, setFormdata] = useState({
+    hotelName: "",
+    dates: "",
+    specialRequirements: "",
+  });
   const { userProfile } = useAuth();
   const router = useRouter();
 
@@ -1313,12 +1319,9 @@ export default function SubmitExpensePage() {
   };
 
 
-  const FormData = {
-  // ... other fields ...
-  hotelName: "",
-  dates: "",
-  specialRequirements: "",
-};
+
+  
+
 
   return (
     <div className="max-w-4xl mx-auto">
@@ -1586,6 +1589,7 @@ export default function SubmitExpensePage() {
                     rows={2}
                   />
                 </div> */}
+                
                 <div className="space-y-2">
                   <Label htmlFor="accommodationDetails">
                     Accommodation Details (Optional)
@@ -1601,38 +1605,35 @@ export default function SubmitExpensePage() {
                     <tbody>
                       <tr>
                         <td>
-                          <Input
-                            className="outline-none"
-                            id="hotelName"
-                            value={FormData.hotelName}
-                            onChange={(e) =>
-                              handleInputChange("hotelName", e.target.value)
-                            }
-                            placeholder="Hotel Name"
-                          />
+                            <Input
+                              className="outline-none"
+                              id="hotelName"
+                              value={FormData.hotelName}
+                              onChange={(e) =>
+                                setFormdata((prev) => ({ ...prev, hotelName: e.target.value }))
+                              }
+                              placeholder="Hotel Name"
+                            />
                         </td>
                         <td>
-                          <Input
-                            id="dates"
-                            value={FormData.dates}
-                            onChange={(e) =>
-                              handleInputChange("dates", e.target.value)
-                            }
-                            placeholder="Dates"
-                          />
+                            <Input
+                              id="dates"
+                              value={FormData.dates}
+                              onChange={(e) =>
+                                setFormdata((prev) => ({ ...prev, dates: e.target.value }))
+                              }
+                              placeholder="Dates"
+                            />
                         </td>
                         <td>
-                          <Input
-                            id="specialRequirements"
-                            value={FormData.specialRequirements}
-                            onChange={(e) =>
-                              handleInputChange(
-                                "specialRequirements",
-                                e.target.value
-                              )
-                            }
-                            placeholder="Special Requirements"
-                          />
+                            <Input
+                              id="specialRequirements"
+                              value={FormData.specialRequirements}
+                              onChange={(e) =>
+                                setFormdata((prev) => ({ ...prev, specialRequirements: e.target.value }))
+                              }
+                              placeholder="Special Requirements"
+                            />
                         </td>
                       </tr>
                     </tbody>

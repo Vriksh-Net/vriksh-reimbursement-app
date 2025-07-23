@@ -11,8 +11,8 @@ export const uploadFile = async (
   try {
     console.log("Uploading file:", file.name); // Debug log
 
-    // Generate a unique file path (e.g., receipts/userid-timestamp-filename)
-    const filePath = `${Date.now()}-${encodeURIComponent(file.name)}`;
+    // Correct: Do NOT include bucket name in filePath
+    const filePath = `${Date.now()}-${file.name}`;
 
     // Upload to Supabase Storage
     const { error: uploadError } = await supabase.storage
@@ -28,7 +28,9 @@ export const uploadFile = async (
     }
 
     // Get public URL
-    const { data } = supabase.storage.from("vriksh-bill-attachments").getPublicUrl(filePath);
+    const { data } = supabase.storage
+      .from("vriksh-bill-attachments")
+      .getPublicUrl(filePath);
 
     if (!data?.publicUrl) {
       console.error("Failed to get public URL"); // Debug log
@@ -42,6 +44,16 @@ export const uploadFile = async (
   } catch (error: any) {
     console.error("Exception:", error.message); // Debug log
     return { url: "", error: error.message || "Failed to upload file" };
+  }
+};
+
+// Helper function to check if a file URL is accessible
+export const isFileAccessible = async (fileUrl: string): Promise<boolean> => {
+  try {
+    const response = await fetch(fileUrl, { method: "HEAD" });
+    return response.ok;
+  } catch {
+    return false;
   }
 };
 

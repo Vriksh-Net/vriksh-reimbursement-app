@@ -96,7 +96,13 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
         />
         <div className="fixed inset-y-0 left-0 flex w-64 flex-col bg-white">
           <div className="flex h-16 items-center justify-between px-4">
-            <h1 className="text-xl font-semibold">Vriksh Reimbursement System</h1>
+            <Image
+              src="/Giflogo.gif"
+              alt="Logo"
+              width={150}
+              height={150}
+              unoptimized
+            />
             <Button
               variant="ghost"
               size="sm"
@@ -132,8 +138,13 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
       <div className="hidden lg:fixed lg:inset-y-0 lg:flex lg:w-64 lg:flex-col">
         <div className="flex flex-col flex-grow bg-white border-r border-gray-200">
           <div className="flex h-16 items-center px-4">
-            <Image src="/Giflogo.gif" alt="Logo" width={150} height={150} />
-            {/* <h1 className="text-md font-semibold">Reimbursement System</h1> */}
+            <Image
+              src="/Giflogo.gif"
+              alt="Logo"
+              width={150}
+              height={150}
+              unoptimized
+            />
           </div>
           <nav className="flex-1 space-y-1 px-2 py-4">
             {navigation.map((item) => {
@@ -161,7 +172,6 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
       <div className="lg:pl-64">
         {/* Top bar */}
         <div className="sticky top-0 z-40 flex h-16 shrink-0 items-center gap-x-4 border-b border-gray-200 bg-white px-4 shadow-sm sm:gap-x-6 sm:px-6 lg:px-8">
-          <h1 className="text-xl font-semibold flex justify-start items-start">Vriksh Reimbursement System</h1>
           <Button
             variant="ghost"
             size="sm"
@@ -177,16 +187,26 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
               {/* Role Switcher */}
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="outline" size="sm" className="cursor-pointer">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="cursor-pointer"
+                  >
                     <UserCheck className="mr-2 h-4 w-4" />
                     Switch Role
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
-                  <DropdownMenuItem onClick={() => setUserRole("employee")} className="cursor-pointer">
+                  <DropdownMenuItem
+                    onClick={() => setUserRole("employee")}
+                    className="cursor-pointer"
+                  >
                     👨‍💼 Employee View
                   </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => setUserRole("admin")} className="cursor-pointer">
+                  <DropdownMenuItem
+                    onClick={() => setUserRole("admin")}
+                    className="cursor-pointer"
+                  >
                     👨‍💻 Admin View
                   </DropdownMenuItem>
                 </DropdownMenuContent>

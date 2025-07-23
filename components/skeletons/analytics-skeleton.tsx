@@ -1,5 +1,5 @@
-import { Card, CardContent, CardHeader } from "@/components/ui/card"
-import { Skeleton } from "@/components/ui/skeleton"
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export function AnalyticsSkeleton() {
   return (
@@ -53,7 +53,10 @@ export function AnalyticsSkeleton() {
             <CardContent>
               <div className="h-[350px] flex items-end justify-between gap-2 p-4">
                 {Array.from({ length: 6 }).map((_, i) => (
-                  <Skeleton key={i} className={`w-full h-${Math.floor(Math.random() * 32) + 8}`} />
+                  <Skeleton
+                    key={i}
+                    className={`w-full h-${Math.floor(Math.random() * 32) + 8}`}
+                  />
                 ))}
               </div>
             </CardContent>
@@ -70,7 +73,12 @@ export function AnalyticsSkeleton() {
             <CardContent>
               <div className="h-[350px] flex items-end justify-between gap-2 p-4">
                 {Array.from({ length: 4 }).map((_, i) => (
-                  <Skeleton key={i} className={`w-full h-${Math.floor(Math.random() * 32) + 12}`} />
+                  <Skeleton
+                    key={i}
+                    className={`w-full h-${
+                      Math.floor(Math.random() * 32) + 12
+                    }`}
+                  />
                 ))}
               </div>
             </CardContent>
@@ -98,7 +106,10 @@ export function AnalyticsSkeleton() {
             <CardContent>
               <div className="space-y-2">
                 {Array.from({ length: 5 }).map((_, i) => (
-                  <div key={i} className="flex justify-between items-center p-2 rounded-lg bg-gray-50">
+                  <div
+                    key={i}
+                    className="flex justify-between items-center p-2 rounded-lg bg-gray-50"
+                  >
                     <div className="flex items-center gap-2">
                       <Skeleton className="w-3 h-3 rounded-full" />
                       <Skeleton className="h-4 w-24" />
@@ -120,7 +131,10 @@ export function AnalyticsSkeleton() {
             <CardContent>
               <div className="space-y-2">
                 {Array.from({ length: 4 }).map((_, i) => (
-                  <div key={i} className="flex justify-between items-center p-2 rounded-lg bg-gray-50">
+                  <div
+                    key={i}
+                    className="flex justify-between items-center p-2 rounded-lg bg-gray-50"
+                  >
                     <div className="flex items-center gap-2">
                       <Skeleton className="w-3 h-3 rounded-full" />
                       <Skeleton className="h-4 w-20" />
@@ -137,5 +151,5 @@ export function AnalyticsSkeleton() {
         </div>
       </div>
     </div>
-  )
+  );
 }

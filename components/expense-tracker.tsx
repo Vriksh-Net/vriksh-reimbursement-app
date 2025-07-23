@@ -69,21 +69,7 @@ const WORKFLOW_STAGES = [
     description: "Expense approved for payment",
     icon: CheckCircle,
     color: "bg-green-500",
-  },
-  {
-    key: "pending_fund_transfer",
-    label: "Fund Transfer",
-    description: "Preparing fund transfer",
-    icon: CreditCard,
-    color: "bg-purple-500",
-  },
-  {
-    key: "fund_transferred",
-    label: "Completed",
-    description: "Fund transferred successfully",
-    icon: Banknote,
-    color: "bg-emerald-500",
-  },
+  }
 ]
 
 export function ExpenseTracker({ expenseId, onClose }: ExpenseTrackerProps) {
